@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +29,7 @@ public class MemberServiceIntergrationTest {
         //given
         //Step1. 테스트할 member 만들기
         Member member = new Member();
-        member.setName("spring");
+        member.setName("spring10");
 
         //when
         //Step2. 테스트하는 메서드의 리턴값 받기

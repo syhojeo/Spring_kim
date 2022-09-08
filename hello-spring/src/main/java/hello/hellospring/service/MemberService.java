@@ -2,10 +2,13 @@ package hello.hellospring.service;
 
 import hello.hellospring.domain.Member;
 import hello.hellospring.repository.MemberRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+//JPA에서 데이터를 저장하거나 변경할때에는 Transactional 이 필요하다 (JPA는 항상 Transaction 안에서 사용해야함)
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
