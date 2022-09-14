@@ -12,6 +12,9 @@ import hello.core.order.OrderServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+//JAVA 코드를 이용한 bean 설정 (FactoryBean을 이용한 빈설정방법)
+//직접 Bean을 설정하는 방식은 XML을 이용한 방식이다 (appConfig.xml)
+
 //app 환경설정 (배역에 대한 섭외는 여기서!) AppConfig = 공연기획자
 //AppConfig를 통해 관심사를 분리한다!!
 @Configuration
