@@ -33,4 +33,14 @@ class OrderServiceTest {
         Assertions.assertThat(order.getDiscountPrice()).isEqualTo(1000);
     }
 
+    //필드 자동주입을 사용시 DI가 없는 컨테이너 환경에서는 사용이 불가능하다
+    @Test
+    void filedInjectionTest() {
+        OrderServiceImpl orderService = new OrderServiceImpl();
+        orderService.createOrder(1L, "itemA", 10000);
+        //널포인트 익셉션이 뜨게된다
+
+        //결국 이걸 해결하려면 setter를 추가하는식으로 해서 MemberRepository 와 DiscountPolicy 를 객체 생성해서 넣어줘야 한다
+        //그냥 쓰지 말자!!
+    }
 }
