@@ -1,5 +1,6 @@
 package hello.core.order;
 
+import hello.core.annotation.MainDiscountPolicy;
 import hello.core.discount.DiscountPolicy;
 import hello.core.discount.FixDiscountPolicy;
 import hello.core.discount.RateDiscountPolicy;
@@ -52,10 +53,18 @@ public class OrderServiceImpl implements OrderService {
 //    }
 
     //하나의 빈이 여러타입을 가지고 있을때 방법3
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+//        this.memberRepository = memberRepository;
+//        this.discountPolicy = discountPolicy;
+//    }
+
+    //하나의 빈이 여러타입을 가지고 있을때 방법4
+    //직접 만든 어노테이션 사용
+    public OrderServiceImpl(MemberRepository memberRepository, @MainDiscountPolicy DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
+
 
     // @RequiredArgsConstructor(lombok 사용시 생성자를 따로 명시 안한다)
 //    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
