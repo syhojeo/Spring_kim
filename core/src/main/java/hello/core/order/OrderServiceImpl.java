@@ -29,13 +29,6 @@ public class OrderServiceImpl implements OrderService {
 //    private final MemberRepository memberRepository;
 //    private final DiscountPolicy discountPolicy;
 //
-//    //생성자 자동주입
-//    @Autowired
-//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-//        this.memberRepository = memberRepository;
-//        this.discountPolicy = discountPolicy;
-//    }
-
 
     //수정자 주입
 //    @Autowired(required = false) // required = false 를 통해 주입할 대상이 없을때도 사용가능
@@ -50,10 +43,16 @@ public class OrderServiceImpl implements OrderService {
 //        this.discountPolicy = discountPolicy;
 //    }
 
-    //필드 자동 주입  
-    //but 권장하지 않는다
-    @Autowired private MemberRepository memberRepository;
-    @Autowired private DiscountPolicy discountPolicy;
+    private MemberRepository memberRepository;
+    private DiscountPolicy discountPolicy;
+
+    //일반 메서드 자동 주입
+    //수정자 주입과 같다
+    @Autowired
+    public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
