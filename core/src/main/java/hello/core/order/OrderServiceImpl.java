@@ -8,10 +8,11 @@ import hello.core.member.MemberRepository;
 import hello.core.member.MemoryMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
+//@RequiredArgsConstructor //lombok
 public class OrderServiceImpl implements OrderService {
 
     // 할인정책을 변경하려면 OrderServiceImpl의 소스코드를 변경해야한다
@@ -35,6 +36,26 @@ public class OrderServiceImpl implements OrderService {
     //생성자 자동주입
     private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy;
+
+
+    //하나의 빈이 여러타입을 가지고 있을때 방법1
+    //필드명, 파라미터 명으로 빈 이름 매칭을 해준다 (discountPolicy -> rateDiscountPolicy)
+//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy rateDiscountPolicy) {
+//        this.memberRepository = memberRepository;
+//        this.discountPolicy = rateDiscountPolicy;
+//    }
+
+    //하나의 빈이 여러타입을 가지고 있을때 방법2 @Qualifer
+//    public OrderServiceImpl(MemberRepository memberRepository, @Qualifier("fixDiscountPolicy") DiscountPolicy discountPolicy) {
+//        this.memberRepository = memberRepository;
+//        this.discountPolicy = discountPolicy;
+//    }
+
+    //하나의 빈이 여러타입을 가지고 있을때 방법3
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
 
     // @RequiredArgsConstructor(lombok 사용시 생성자를 따로 명시 안한다)
 //    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
