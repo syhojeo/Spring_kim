@@ -43,13 +43,11 @@ public class OrderServiceImpl implements OrderService {
 //        this.discountPolicy = discountPolicy;
 //    }
 
-    private MemberRepository memberRepository;
-    private DiscountPolicy discountPolicy;
+    private final MemberRepository memberRepository;
+    private final DiscountPolicy discountPolicy;
 
-    //일반 메서드 자동 주입
-    //수정자 주입과 같다
     @Autowired
-    public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
