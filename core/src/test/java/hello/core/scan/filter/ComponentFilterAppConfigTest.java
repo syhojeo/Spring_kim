@@ -40,6 +40,7 @@ public class ComponentFilterAppConfigTest {
             //type = FilterType.ASSIGNABLE_TYPE, classes = BeanA.class
             //type = FilterType 사용시 기본값은 ANNOTATION이다 (FilterType = FilterType.ANNOTATION)
     )
+
     static class ComponentFilterAppConfig {
 
     }
