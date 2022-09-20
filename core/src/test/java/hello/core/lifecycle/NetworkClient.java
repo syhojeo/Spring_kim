@@ -5,7 +5,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 //초기화 , 소멸 인터페이스 사용 (Spring에서만 사용가능)
 //외부 라이브러리 같은 경우 적용 불가능
-//위와 같은 단점들이 있기 때문에 사용하지 않는다
+//위와 같은 단점들이 있기 때문에 사용하지 않는다 -> @Bean(init = "" , destroy = "") 를 사용
 public class NetworkClient implements InitializingBean, DisposableBean {
 
     private  String url;
