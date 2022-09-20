@@ -46,7 +46,7 @@ public class NetworkClient{
 
     //객체 생성완료 후 실행
     @PostConstruct
-    public void init() throws Exception {
+    public void init(){
         System.out.println("NetworkClient.afterPropertiesSet");
         connect();
         call("초기화 연결 메시지");
@@ -54,7 +54,7 @@ public class NetworkClient{
 
     //객체 소멸완료 후 실행
     @PreDestroy
-    public void close() throws Exception {
+    public void close(){
         disconnect();
     }
 }
