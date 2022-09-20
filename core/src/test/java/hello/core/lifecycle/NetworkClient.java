@@ -1,12 +1,10 @@
 package hello.core.lifecycle;
 
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
-
-//초기화 , 소멸 인터페이스 사용 (Spring에서만 사용가능)
-//외부 라이브러리 같은 경우 적용 불가능
-//위와 같은 단점들이 있기 때문에 사용하지 않는다 -> @Bean(init = "" , destroy = "") 를 사용
-public class NetworkClient implements InitializingBean, DisposableBean {
+//Bean의  initMethod = "", destroyMethod = "" 만드는 것의 장점
+//1. 메서드 이름을 자유롭게 줄 수 있다
+//2. 스프링 빈이 스프링 코드에 의존하지 않는다
+//3. 코드가 아니라 설정 정보를 사용하기 때문에 코드를 고칠 수 없는 외부 라이브러리에도 초기화 종료 메서드를 적용할 수 있다 !!
+public class NetworkClient{
 
     private  String url;
 
@@ -34,17 +32,17 @@ public class NetworkClient implements InitializingBean, DisposableBean {
         System.out.println("close " + url);
     }
 
+    //@Bean(init = "" , destroy = "") 를 사용 하기 위해 init, destroy 메서드만들기
+
     //객체 생성완료 후 실행
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    public void init() throws Exception {
         System.out.println("NetworkClient.afterPropertiesSet");
         connect();
         call("초기화 연결 메시지");
     }
 
-    //객체 소멸완료 후 실행행
-   @Override
-    public void destroy() throws Exception {
+    //객체 소멸완료 후 실행
+    public void close() throws Exception {
         disconnect();
     }
 }
