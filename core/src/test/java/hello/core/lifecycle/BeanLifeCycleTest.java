@@ -17,12 +17,7 @@ public class BeanLifeCycleTest {
     @Configuration
     static class LifeCycleConfig {
 
-        //대부분의 라이브러리들은 close 가 이미 정의 되어 있기 때문에 destroyMethod를 사용하지 않아도
-        // 추론 기능을 통해 자동으로 close 메서드가 적용된다
-
-        // 이 추론 기능을 사용하고 싶지 않을때에는
-        // destroyMethod = "" 라고 적으면 destroyMethod의 (inferred) 추론 기능을 사용 안 할 수 있다
-        @Bean(initMethod = "init", destroyMethod = "close")
+        @Bean
         public NetworkClient networkClient() {
             //Step1. 객체 생성을 한후
             NetworkClient networkClient = new NetworkClient();
