@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -55,24 +56,50 @@ public class singletonWithPrototypeTest1 {
 
        ClientBean clientBean2 = ac.getBean(ClientBean.class);
         int count2 = clientBean2.logic();
-        assertThat(count2).isEqualTo(2);
+        assertThat(count2).isEqualTo(1);
     }
 
     @Scope("singleton")
     static class ClientBean {
-        private final PrototypeBean prototypeBean; // 생성시점에 주입
+
+        /*
+            Provider: Bean에서 원하는 객체를 수동적으로 찾아온다 (Dependency Lookup)
+        
+            Provider를 이용하여 싱글톤 안의 프로토타입이 매번 새로운 객체를 받을 수 있도록 만들어준다
+            스프링 컨테이너로부터 DL (dependency Lookup) 기능만 사용하여 필요한 객체를 받아온다(주입의 반대개념)
+            Provider는 DL의 기능을 하며 프로토타입이기 때문에 객체를 받아오는게 아니라 원래 객체를 받아오는 (DL)의
+            기능을 수행한다 -> 프로토타입에서만 쓰이는 것이 아니라 DL기능을 쓰기 위해 사용된것
+
+            Provider를 사용하지 않는다면 스프링 컨테이너를 해당 클래스내에서 불러와서 프로토타입을 가져와야하지만
+            스프링 컨테이너의 방대한 기능을 사용하지 않고 DL의 기능만 사용하고 싶을때 Provider를 사용한다
+         */
+
+        /*
+            //provider를 사용하지 않을 경우 스프링 컨테이너를 사용해야하고
+            //이럴 경우 스프링 컨테이너에 종속적인 코드가되며 단위테스트도 하기 어려운 코드로 변한다
+
+            @Autowired
+            private ApplicationContext ac;
+
+            public int logic() {
+            //PrototypeBean prototypeBean = ac.getBean(PrototypeBean.class);
+            prototypeBean.addCount();
+            int count = prototypeBean.getCount();
+            return count;
+        }
+         */
 
         @Autowired
-        public ClientBean(PrototypeBean prototypeBean) {
-            this.prototypeBean = prototypeBean;
-        }
+        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
 
         public int logic() {
+            PrototypeBean prototypeBean = prototypeBeanProvider.getObject(); //getObject를 통해 프로토타입 빈이 생성된다
             prototypeBean.addCount();
             int count = prototypeBean.getCount();
             return count;
         }
     }
+
     @Scope("prototype")
     static class PrototypeBean {
 
