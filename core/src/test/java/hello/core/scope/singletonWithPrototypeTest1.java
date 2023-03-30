@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Provider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class singletonWithPrototypeTest1 {
 
         /*
             Provider: Bean에서 원하는 객체를 수동적으로 찾아온다 (Dependency Lookup)
-        
+
             Provider를 이용하여 싱글톤 안의 프로토타입이 매번 새로운 객체를 받을 수 있도록 만들어준다
             스프링 컨테이너로부터 DL (dependency Lookup) 기능만 사용하여 필요한 객체를 받아온다(주입의 반대개념)
             Provider는 DL의 기능을 하며 프로토타입이기 때문에 객체를 받아오는게 아니라 원래 객체를 받아오는 (DL)의
@@ -90,14 +91,25 @@ public class singletonWithPrototypeTest1 {
          */
 
         @Autowired
-        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
+        private Provider<PrototypeBean> prototypeBeanProvider;
 
         public int logic() {
-            PrototypeBean prototypeBean = prototypeBeanProvider.getObject(); //getObject를 통해 프로토타입 빈이 생성된다
+            //getObject(JSR inject Provider사용시 .get()사용)를 통해 프로토타입 빈이 생성된다
+            PrototypeBean prototypeBean = prototypeBeanProvider.get();
             prototypeBean.addCount();
             int count = prototypeBean.getCount();
             return count;
         }
+        /*
+            Spring의 Provider vs JSR-330 (자바표준)의 Provider
+            Spring에서 제공하는 Provider는 DL 기능 외에도 여러가지 추가 기능들을 지원해준다
+            JSR-330의 Provider는 DL기능만 지원하지만 스프링 컨테이너가 아닌 다른 컨테이너에서도 사용가능하다
+            하지만 JSR-330의 경우 라이브러리를 추가해줘야한다
+
+            따라서 선택의 문제이지만 여러가지 기능과 라이브러리를 추가하고 싶지 않을 경우 Spring에서 제공하는 기능을
+            사용하고 단순한게 좋거나 다른 컨테이너에서 사용해야한다면 JSR-330 에서 제공하는 기능을 사용하는것이 좋다
+            (둘중 기능이 겹치는 경우 많이 발생하니 잘 생각해서 선택할것)
+         */
     }
 
     @Scope("prototype")
