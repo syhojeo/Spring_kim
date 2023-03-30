@@ -17,14 +17,14 @@ public class LogDemoController {
     /*
         MyLogger를 request Scope 이기 때문에 request 없이 받아올 수 없다 때문에 DL 기능이 필요
      */
-    private final ObjectProvider<MyLogger> myLoggerProvider;
+    private final MyLogger myLogger;
 
     @RequestMapping("log-demo")
     @ResponseBody
     public String logDemo(HttpServletRequest request) {
         String requestURL = request.getRequestURI().toString();
         //myLogger.setRequestURL(requestURL);
-        MyLogger myLogger = myLoggerProvider.getObject();
+        //MyLogger myLogger = myLoggerProvider.getObject();
         myLogger.setRequestURL(requestURL);
 
         myLogger.log("controller test");

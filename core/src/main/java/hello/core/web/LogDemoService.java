@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 public class LogDemoService {
 
     //public final MyLogger myLogger; MyLogger는 request 가 들어와야 생성이 가능하기 때문에 DL 이 필요하다
-    private final ObjectProvider<MyLogger> myLoggerProvider;
+    private final MyLogger myLogger;
 
     public void logic(String id) {
-        MyLogger myLogger = myLoggerProvider.getObject();
+        //MyLogger myLogger = myLoggerProvider.getObject();
         myLogger.log("service id = " + id);
     }
 }
