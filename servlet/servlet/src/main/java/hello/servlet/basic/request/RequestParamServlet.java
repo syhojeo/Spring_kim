@@ -9,11 +9,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /*
-    1. 파라미터 전송 기능
+    HTTP 에 요청된 데이터를 request.getParmeter(), request.getParameterValues() 를 이용하여 값을 받아올 수 있다
+    요청 데이터를 받는 방식 3가지
+
+    1. GET 방식의 쿼리 스트링을 이용한 요청 데이터 받기
+    파라미터 전송 기능
     http://localhost:8080/request-param?username=hello&age=20
 
-    HTTP 에 요청된 쿼리스트링을 request 객체를 이용하여 받아오기
-    request.getParameter(), request.getParameterValues() 를 통한 GET 방식 쿼리스트링 요청 값 받아오기
+    2. POST 방식의 HTML Form 형식의 요청 데이터 받기
+    webapp/basic/hello-form.html 으로 부터 받기 OR postman 이용
+
+    postman 이용시
+    POST 방식의 경우 body가 없는 GET 방식과 다르게 Content-type을 꼭 설정해줘야하며
+    Content-type으로 application/x-www-form-urlencoded 를 사용하면 된다
+
  */
 @WebServlet(name = "requestParamSevlet", urlPatterns = "/request-param")
 public class RequestParamServlet extends HttpServlet {
