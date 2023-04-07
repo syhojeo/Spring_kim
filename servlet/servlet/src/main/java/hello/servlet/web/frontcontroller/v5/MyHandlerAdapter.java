@@ -13,6 +13,7 @@ public interface MyHandlerAdapter {
 
     //프론트 컨트롤러 대신 컨트롤러를 호출하는 핸들러 어댑터 메서드
     //컨트롤러와 같이 ModelView를 반환 (만약 컨트롤러가 ModelView를 반환 안한다면 만들어서라도 반환해줘야함)
+    //핸들러 어댑터(v1~v4 에서의 프론트 컨트롤러의 역할)
     ModelView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
         throws ServletException, IOException;
 }
