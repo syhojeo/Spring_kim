@@ -1,0 +1,63 @@
+package hello.springmvc.basic.response;
+
+import hello.springmvc.basic.HelloData;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+@Slf4j
+//@Controller
+//@ResponseBody //@ResponseBody를 메서드마다 적용하기 불편할때 클래스 레벨로 지정가능
+@RestController // @RestController = Controller + ResponseBody의 역할을 해준다
+public class ResponseBodyController {
+
+    //response write
+    @GetMapping("/response-body-string-v1")
+    public void responseBodyV1(HttpServletResponse response) throws IOException {
+        response.getWriter().write("ok");
+    }
+
+    //ResponseEntity
+    @GetMapping("/response-body-string-v2")
+    public ResponseEntity<String> responseBodyV2() {
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+
+    //@ResponseBody
+    //@ResponseBody
+    @GetMapping("/response-body-string-v3")
+    public String responseBodyV3() {
+        return "ok";
+    }
+
+    //@ResponseBody, ResponseEntity
+    //@ResponseBody
+    @GetMapping("/response-body-json-v1")
+    public ResponseEntity<HelloData> responseBodyJsonV1() {
+        HelloData helloData = new HelloData();
+        helloData.setUsername("UserA");
+        helloData.setAge(20);
+
+        return new ResponseEntity<>(helloData, HttpStatus.OK);
+    }
+
+    //@ResponseBody, @ResponseStatus (동적으로 설정하려면 ResponseEntity 에서 HTTPstatus를 동적 설정해야된다)
+    @ResponseStatus(HttpStatus.OK)
+    //@ResponseBody
+    @GetMapping("/response-body-json-v2")
+    public HelloData responseBodyJsonV2() {
+        HelloData helloData = new HelloData();
+        helloData.setUsername("UserA");
+        helloData.setAge(20);
+
+        return helloData;
+    }
+}
