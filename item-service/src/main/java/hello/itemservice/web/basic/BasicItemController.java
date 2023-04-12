@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/basic/items")
@@ -125,11 +126,30 @@ public class BasicItemController {
         Post 요청을 redirect 를 이용하여 GET 요청으로 변경하여 새로고침을 해도 GET 요청이 가게 만든다
         (의도치 않은 POST를 방지할 수 있다)
      */
-    @PostMapping("add")
+    //@PostMapping("add")
     public String addItemV5(Item item) {
 
         itemRepository.save(item);
+        //redirectAttributes 사용과 다르게 + item.getId() 부분 때문에 url 인코딩이 되지 않는다
         return "redirect:/basic/items/" + item.getId();
+    }
+
+    /*
+        RedirectAttributes
+        RedirectAttributes를 이용하여 redirect url에 변수값을 넣을 수 있고,
+        변수명을 넣지 않은 추가 정보들은 queryString형태로 추가할 수 있다
+
+        변수 치환, 변수 치환이 안된경우 쿼리파라미터에 추가되어 넘어간다, url이 인코딩 된다
+     */
+    @PostMapping("add")
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
+
+        Item saveItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", saveItem.getId());
+        redirectAttributes.addAttribute("status", true);
+
+        // /basic/items/{itemId}?status=true 로 이동한다
+        return "redirect:/basic/items/{itemId}";
     }
 
     @GetMapping("/{itemId}/edit")
