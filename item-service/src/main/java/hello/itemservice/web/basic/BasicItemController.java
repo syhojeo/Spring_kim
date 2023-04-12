@@ -106,11 +106,30 @@ public class BasicItemController {
     }
 
     //@ModelAttribute 자체를 생략 (위와 같다)
-    @PostMapping("/add")
+    //@PostMapping("/add")
     public String addItemV4(Item item) {
 
         itemRepository.save(item);
         return "basic/item";
+    }
+
+    /*
+        PRG를 이용한 문제해결 (redirect 사용)
+        상품 등록 시 Post 방식으로 상품을 등록할 정보가 query String으로 들어오게 되는데
+        상품을 완료하고 redirect를 하지 않고 view로 렌더링만 할경우
+        렌더링된 페이지에서 새로고침을 했을떄 이전에 보냈던 요청(Post로 상품 저장 query String요청)이 다시 보내지고
+        새로고침을 할때마다 이전에 등록한 정보로 계속해서 상품을 등록하게 되는 문제가 발생한다
+
+        이를 막기 위해 PRG를(redirect) 사용하면 상품 등록 이후 새로고침을 해도 redirect url로 이동하기 때문에        PRG 문제가 해결된다
+        PRG -> Post/ redirect / GET
+        Post 요청을 redirect 를 이용하여 GET 요청으로 변경하여 새로고침을 해도 GET 요청이 가게 만든다
+        (의도치 않은 POST를 방지할 수 있다)
+     */
+    @PostMapping("add")
+    public String addItemV5(Item item) {
+
+        itemRepository.save(item);
+        return "redirect:/basic/items/" + item.getId();
     }
 
     @GetMapping("/{itemId}/edit")
