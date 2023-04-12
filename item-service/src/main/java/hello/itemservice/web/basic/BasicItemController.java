@@ -57,12 +57,13 @@ public class BasicItemController {
     public String addForm() {
         return "basic/addForm";
     }
+
     //같은 url (http Method로 구분)
     //@PostMapping("/add")
     public String addItemV1(@RequestParam String itemName,
-                        @RequestParam int price,
-                        @RequestParam Integer quantity,
-                        Model model) {
+        @RequestParam int price,
+        @RequestParam Integer quantity,
+        Model model) {
 
         Item item = new Item();
         item.setItemName(itemName);
@@ -110,5 +111,29 @@ public class BasicItemController {
 
         itemRepository.save(item);
         return "basic/item";
+    }
+
+    @GetMapping("/{itemId}/edit")
+    public String editForm(@PathVariable Long itemId, Model model) {
+        Item item = itemRepository.findById(itemId);
+        model.addAttribute("item", item);
+        return "basic/editForm";
+    }
+
+    /*
+        redirect 사용 이유
+        만약 redirect를 안하고 서블릿 상의 이동만 한다면
+        http://localhost:8080/basic/items/2/edit 과 같이 edit이 남는다
+        (서버에서만 이동하는것이기 때문에 url이 변경되지 않는다)
+
+        상품 상세페이지인데 url 에 edit이 남는것 자체가 문제가 있다
+
+        redirect를 한다면 http://localhost:8080/basic/items/2 으로 url 상 완전 처음으로 돌아가게된다
+     */
+    @PostMapping("/{itemId}/edit")
+    public String edit(@PathVariable Long itemId, @ModelAttribute Item item) {
+        itemRepository.update(itemId, item);
+        //{itemId}는 @PathVariable의 itemId를 표현한것 (이렇게 표현하면 변수값이 넣어진다)
+        return "redirect:/basic/items/{itemId}";
     }
 }
