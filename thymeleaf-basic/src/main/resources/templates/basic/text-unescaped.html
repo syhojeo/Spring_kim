@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>text vs utext</h1>
+<ul>
+  <!-- escape -->
+  <li>th:text = <span th:text="${data}"></span></li>
+  <!-- unescape -->
+  <li>th:utext = <span th:utext="${data}"></span></li>
+</ul>
+<h1><span th:inline="none">[[...]] vs [(...)]</span></h1>
+<ul>
+  <!-- escape -->
+  <li><span th:inline="none">[[...]] = </span>[[${data}]]</li>
+  <!-- unescape -->
+  <li><span th:inline="none">[(...)] = </span>[(${data})]</li>
+</ul>
+</body>
+</html>
