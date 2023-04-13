@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>예시</h1>
+<span th:text="${data}">html data</span>
+
+<h1>1. 표준 HTML 주석</h1>
+<!-- 주석처리 -->
+<!--
+<span th:text="${data}">html data</span>
+-->
+
+<h1>2. 타임리프 파서 주석</h1>
+<!-- 렌더링 할 때 주석 자체가 없어진다 (권장)-->
+<!--/* [[${data}]] */-->
+
+<!--
+     밑의 방식으로 사용해도 적용된다
+     위와 다르게 렌더링이 아닌 그냥 HTML 로 열 경우 주석 적용이 안된다(렌더링 할때만 주석 적용)
+-->
+<!--/*-->
+<span th:text="${data}">html data</span>
+<!--*/-->
+
+<h1>3. 타임리프 프로토타입 주석</h1>
+<!-- 서버 사이드에서 렌더링 할 경우 주석이 아닌 실제로 타임리프가 적용되어 렌더링 된다 -->
+<!--/*/
+<span th:text="${data}">html data</span>
+/*/-->
+
+</body>
+</html>
