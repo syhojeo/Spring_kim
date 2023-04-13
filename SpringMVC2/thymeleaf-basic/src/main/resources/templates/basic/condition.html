@@ -37,6 +37,7 @@
         <td th:switch="${user.age}">
             <span th:case="10">10살</span>
             <span th:case="20">20살</span>
+            <!-- *은 default 로 태그 안의 값 (기타)가 출력된다 -->
             <span th:case="*">기타</span>
         </td>
     </tr>
