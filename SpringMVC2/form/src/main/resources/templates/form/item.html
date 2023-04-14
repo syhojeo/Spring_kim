@@ -53,6 +53,35 @@
         </div>
     </div>
 
+    <!-- multi checkbox -->
+    <div>
+        <div>등록 지역</div>
+        <div th:each="region : ${regions}" class="form-check form-check-inline">
+            <!-- 밑의 필드 값은 ${item.regions}이고,
+									value는 model에서 받아온 regions 에서 반복문으로 추출한 region의 Map의 key값
+						-->
+            <input type="checkbox" th:field="${item.regions}" th:value="${region.key}"
+                   class="form-check-input" disabled>
+            <!--
+                th:for="${#ids.prev('regions')}" : 위의 필드(prev) regions의 id값을 그대로 가져온다
+                label 의 적절한 id 값을 반복문을 통해 만들기 어렵기 때문에 타임리프에서 기능 지원을 해준다
+                ids.next도 있다
+
+                th:text="${region.value}" : region Map의 value 값
+            -->
+            <label th:for="${#ids.prev('regions')}"
+                   th:text="${region.value}" class="form-check-label">서울</label>
+        </div>
+        <!--
+            prev('name') name과 th:field의 변수명이 같아야만 동작한다
+            (+ th:field에서 사용하는 객체는 th:object 의 객체만 사용가능)
+            다를 경우 "Cannot obtain previous ID count for ID \"" + id + "\""); 에러가 뜬다
+
+            즉, th:object가 가지는 변수명이 prev('name')과 일치해야만 ids 가 동작한다
+            타임리프의 ids 클래스 확인해볼것
+        -->
+    </div>
+
     <div class="row">
         <div class="col">
             <button class="w-100 btn btn-primary btn-lg"
