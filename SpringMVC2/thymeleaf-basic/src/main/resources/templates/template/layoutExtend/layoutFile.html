@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<!--
+     레이아웃 원리
+     1. 템플릿 조각을 layout 페이지로 지정하고 현재 html 을 layout 페이지로 만든다
+     2. 현재 페이지가 layout 페이지로 씌어지지만 템플릿 조각을 사용할 때 썼던 변수값은 들고간다
+     3. 들고간 변수값을 이용해 layout 페이지에서 원하는 위치에 컨텐츠를 끼워넣는다
+
+     즉, fragment를 이용한 방법 중에는
+     가장 먼저 해봤던 방식인 외부 파일의 fragment를 현재 파일로 가져오는 방식이 있고
+     레이아웃을 이용하는 방식과 같이 아예 현재 파일을 레이아웃 파일로 변경하고,
+     현재 파일에 있는 컨텐츠(HTML)만 변수로 지정하여 변경된(replace) 레이아웃 파일에 적용하는 방식
+     두가지 방식이있다.
+-->
+<html th:fragment="layout (title, content)" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:replace="${title}">레이아웃 타이틀</title>
+</head>
+<body>
+<h1>레이아웃 H1</h1>
+<div th:replace="${content}">
+    <p>레이아웃 컨텐츠</p>
+</div>
+<footer>
+    레이아웃 푸터
+</footer>
+</body>
+</html>
