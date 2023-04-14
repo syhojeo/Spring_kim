@@ -34,11 +34,11 @@
 
         <hr class="my-4">
         <!-- single checkbox -->
-        <div>판매 여부</div>
+        <!--<div>판매 여부</div>
         <div>
             <div class="form-check">
                 <input type="checkbox" id="open" name="open" class="form-check-input">
-                <!--
+                &lt;!&ndash;
                     히든 필드로 _open을 넣어야 하는 이유
                     check box의 경우 체크를 할경우 true로 정상적으로 들어오지만
                     체크를 하지 않을 경우 아무런 값도 들어오지 않게 된다 때문에 open 변수가 false 가 아닌
@@ -48,8 +48,20 @@
                     체크를 하지 않았을 경우에 _open 값이 있는것을 확인하고 open값을 null이 아닌 false 로 변경시켜준다
 
                     이 기능은 스프링이 지원하는 기능이다
+                &ndash;&gt;
+                <input type="hidden" name="_open" value="on"/> &lt;!&ndash; 히든 필드 추가 &ndash;&gt;
+                <label for="open" class="form-check-label">판매 오픈</label>
+            </div>
+        </div>-->
+        <!-- 타임리프 사용 -->
+        <div>판매 여부</div>
+        <div>
+            <div class="form-check">
+                <!--
+                    타임리프의 th:field로 checkbox 설정시
+                    위의 주석과 같이 _open 히든 필드가 자동으로 추가된다
                 -->
-                <input type="hidden" name="_open" value="on"/> <!-- 히든 필드 추가 -->
+                <input type="checkbox" id="open" th:field="*{open}" class="form-check-input">
                 <label for="open" class="form-check-label">판매 오픈</label>
             </div>
         </div>

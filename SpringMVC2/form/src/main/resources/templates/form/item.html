@@ -40,6 +40,19 @@
 
     <hr class="my-4">
 
+    <div>판매 여부</div>
+    <div>
+        <div class="form-check">
+            <!--
+                타임리프의 th:field로 checkbox 설정시
+                open 값이 true기 때문에 타임리프가 자동으로 checked 상태까지 만들어준다
+                (자동으로 하지 않는다면 값에 따른 조건문을 적용하여 checked 설정을 넣어야하는 번거로움이 발생)
+            -->
+            <input type="checkbox" id="open" th:field="${item.open}" class="form-check-input" disabled>
+            <label for="open" class="form-check-label">판매 오픈</label>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col">
             <button class="w-100 btn btn-primary btn-lg"
