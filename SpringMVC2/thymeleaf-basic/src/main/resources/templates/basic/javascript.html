@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!-- 자바스크립트 인라인 사용 전 -->
+<script>
+    // 타임리프의 문법으로 모델값 받기
+    //"[[${user.username}]]" "" <- 를 하지 않으면 에러가 발생한다
+    //(일반 UserA라는 값을 리턴하기 때문에 String타입이 아니다)
+    var username = [[${user.username}]];
+    var age = [[${user.age}]];
+
+    //자바스크립트 내추럴 템플릿 (/*UserA*/ 이런식으로 출력된다)
+    var username2 = /*[[${user.username}]]*/ "test username";
+
+    //객체 (객체.toString으로 출력되기 때문에 에러)
+    var user = [[${user}]];
+
+    //즉 타임리프를 러프하게 javascript와 함께 쓰면 문법적 호환이 맞지 않아 의도치 않은 결과가 발생한다
+    //이를 th:inline을 사용하여 극복한다
+</script>
+
+<!-- th:inline이 선언되면 자바 스크립트의 영역을 인식하고 타임리프에서 이에 알맞게 사용할 수 있도록 변환해준다 -->
+<!-- 자바스크립트 인라인 사용 후 -->
+<script th:inline="javascript">
+    // "username" 쌍따움표 적용됨
+    var username = [[${user.username}]];
+    var age = [[${user.age}]];
+
+    //자바스크립트 내추럴 템플릿
+    /*
+       자바 스크립트 내에서도 타임리프가 대신 적용된다 일반 html 출력시 "test username"이 변수값이 되지만
+       서버에서 렌더링시 user.username이 변수가 된다
+    */
+    var username2 = /*[[${user.username}]]*/ "test username";
+
+    //객체 (객체를 json으로 바꿔서 넣어준다)
+    var user = [[${user}]];
+</script>
+
+<!-- 타임리프로 렌더링 정보를 바로 자바스크립트와 함께 쓰고싶을때 사용 -->
+<!-- 자바스크립트 인라인 each -->
+<script th:inline="javascript">
+
+    [# th:each="user, stat : ${users}"]
+    var user[[${stat.count}]] = [[${user}]];
+    [/]
+
+/*
+    결과
+    var user1 = {"username":"userA","age":10};
+    var user2 = {"username":"userB","age":20};
+    var user3 = {"username":"userC","age":30};
+*/
+</script>
+
+</body>
+</html>
