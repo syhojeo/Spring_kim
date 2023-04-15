@@ -48,6 +48,11 @@
                     체크를 하지 않았을 경우에 _open 값이 있는것을 확인하고 open값을 null이 아닌 false 로 변경시켜준다
 
                     이 기능은 스프링이 지원하는 기능이다
+
+                    좀더 자세히
+                    사용자가 의도적으로 체크되어 있던 값을 체크 해제해도 저장시 아무런 값이 넘어가지 않기 때문에
+                    체크되어있던 값이 체크 해제되었는지 아니면 아무것도 건드리지 않은건지 알 수 있는 방법이 없다
+                    때문에 체크박스에서는 히든필드 사용이 필수적이다.
                 &ndash;&gt;
                 <input type="hidden" name="_open" value="on"/> &lt;!&ndash; 히든 필드 추가 &ndash;&gt;
                 <label for="open" class="form-check-label">판매 오픈</label>
@@ -77,6 +82,35 @@
             </div>
         </div>
 
+        <!-- radio button -->
+        <div>
+            <div>상품 종류</div>
+            <!--
+                enum ${itemTypes} =>  ${T(hello.itemservice.domain.item.ItemType).values()} 대체 가능
+                다만, 패키지 이동시 수정하기 쉽지 않아 권장하지 않음
+            -->
+            <div th:each="type : ${itemTypes}" class="form-check form-check-inline">
+                <!--
+                    라디오 버튼은 채크 박스와 다르게 하나만 선택 가능
+                    type.name() (enum.name()) 시 enum의 이름을 그대로 반환
+                    type.description은 따로 getter를 추가해야 프로퍼티 접근법으로 사용가능
+                    (enum 자체의 기본 기능이 아니기 때문)
+
+                    라디오 버튼은 th:field 즉 타임리프를 사용하더라도 히든필드가 자동 생성되지않는다
+                    때문에 선택을 하지 않았을때 null값이 들어온다
+
+                    라디오 버튼은 한번 채크를 하면 변경은 가능하지만 아예 값을 뺄수가 없다
+                    때문에 채크 박스처럼 null을 고려할 필요가 없다
+                    라디오 값이 변경이 있을 경우 null값이 올일이 없기 때문
+                -->
+                <input type="radio" th:field="*{itemType}" th:value="${type.name()}"
+                       class="form-check-input">
+                <label th:for="${#ids.prev('itemType')}" th:text="${type.description}"
+                       class="form-check-label">
+                    BOOK
+                </label>
+            </div>
+        </div>
 
 
         <div class="row">

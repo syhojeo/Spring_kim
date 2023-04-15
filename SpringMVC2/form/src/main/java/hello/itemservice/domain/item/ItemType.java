@@ -10,4 +10,9 @@ public enum ItemType {
     private ItemType(String description) {
         this.description = description;
     }
+
+    //타임리프의 프로퍼티 접근법을 위해 getter 추가
+    public String getDescription() {
+        return description;
+    }
 }
