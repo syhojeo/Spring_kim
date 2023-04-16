@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,37 +48,38 @@ public class ValidationItemControllerV2 {
         return "validation/v2/addForm";
     }
 
+    //BindingResult 사용
+    //BindingResult는 Item 객체에 대한 Binding 결과를 담기 때문에 사용하는 @ModelAttribute 객체 바로 뒤에와야한다 (순서 중요!)
     @PostMapping("/add")
-    public String addItem(@ModelAttribute Item item, RedirectAttributes redirectAttributes, Model model) {
-
-        //검증 오류 결과를 보관
-        Map<String, String> errors = new HashMap<>();
+    public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         //검증 로직
         //상품 이름이 없는 경우
         if (!StringUtils.hasText(item.getItemName())) {
-            errors.put("itemName", "상품 이름은 필수 입니다.");
+            //bindingResult 사용법
+            bindingResult.addError(new FieldError("item", "itemName", "상품 이름은 필수 입니다."));
         }
         //상품 가격이 너무 낮거나 너무 높은 경우
         if (item.getPrice() == null || item.getPrice() < 1000 || item.getPrice() > 1000000) {
-            errors.put("price", "가격은 1,000 ~ 1,000,000 까지 허용합니다.");
+            bindingResult.addError(new FieldError("item", "price", "가격은 1,000 ~ 1,000,000 까지 허용합니다."));
         }
         //수량 제한
         if (item.getQuantity() == null || item.getQuantity() >= 9999) {
-            errors.put("quantity", "수량은 최대 9,999 까지 허용합니다.");
+            bindingResult.addError(new FieldError("item", "quantity", "수량은 최대 9,999 까지 허용합니다."));
         }
         //특정 필드가 아닌 복합 룰 검증
         if (item.getPrice() != null && item.getQuantity() != null) {
             int resultPrice = item.getPrice() * item.getQuantity();
             if (resultPrice < 10000) {
-                errors.put("globalError", "가격 * 수량의 합은 10,000원 이상이어야 합니다. 현재 값 = " + resultPrice);
+                //ObjectError는 FieldError와 다르게 field 명을 적을 필요가 없다 (field와 직접적이 관련이 없는 global 오류에 사용)
+                bindingResult.addError(new ObjectError("item","가격 * 수량의 합은 10,000원 이상이어야 합니다. 현재 값 = " + resultPrice));
             }
         }
         //검증에 실패하면 다시 입력 폼으로
-        if (!errors.isEmpty()) {
-            //log.info는 map 형태도 key=value 형태로 모두 출력해준다
-            log.info("errors = {}", errors);
-            model.addAttribute("errors", errors);
+        if (bindingResult.hasErrors()) {
+            //bindingResult 에러 로그 보기
+            log.info("errors = {}", bindingResult);
+            //model.addAttribute("errors", bindingResult); bindingResult는 자동으로 model 에 담긴다
             //다시 상품 등록 폼으로
             return "validation/v2/addForm";
         }
