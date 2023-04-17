@@ -179,6 +179,13 @@ public class ValidationItemControllerV2 {
     @PostMapping("/add")
     public String addItemV4(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
+        //바인딩 에러가 발생했을 경우 바로 form 으로 가는 패턴
+        if (bindingResult.hasErrors()) {
+            log.info("errors = {}", bindingResult);
+            //다시 상품 등록 폼으로
+            return "validation/v2/addForm";
+        }
+
         //bindingResult 정보 확인 => target을 Item 으로 알고있다
         log.info("objectName={}", bindingResult.getObjectName());
         log.info("target={}", bindingResult.getTarget());
