@@ -20,6 +20,13 @@ public class WebConfig implements WebMvcConfigurer {
             .order(1)
             .addPathPatterns("/**")
             .excludePathPatterns("/css/**", "/*.ico", "/error");
+
+        //로그인 미인증 여부 확인 인터셉트
+        registry.addInterceptor(new LoginCheckInterceptor())
+            .order(2)
+            .addPathPatterns("/**")
+            .excludePathPatterns("/", "/members/add", "/login", "/logout",
+                "/css/**", "/*.ico", "/error");
     }
 
     /*
