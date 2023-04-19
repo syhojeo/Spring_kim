@@ -2,10 +2,12 @@ package hello.login.web.login;
 
 import hello.login.domain.login.LoginService;
 import hello.login.domain.member.Member;
+import hello.login.web.SessionConst;
 import hello.login.web.session.SessionManager;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +56,7 @@ public class LoginController {
         return "redirect:/";
     }
 
-    @PostMapping("/login")
+    //@PostMapping("/login")
     public String loginV2(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult,
         HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
@@ -77,6 +79,32 @@ public class LoginController {
         return "redirect:/";
     }
 
+    //HTTP Session 사용하기
+    @PostMapping("/login")
+    public String loginV3(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult,
+        HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return "login/loginForm";
+        }
+
+        Member loginMember = loginService.login(form.getLoginId(), form.getPassword());
+
+        if (loginMember == null) {
+            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다");
+            return "login/loginForm";
+        }
+
+        //로그인 성공 처리 TODO
+        //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
+        //request.getSession(true) - default값으로 세션이 있으면 기존 세션을 반환하고 없으면 생성해서 반환
+        //request.getSession(false) - 세션이 있으면 기존 세션 반환, 없으면 null 반환 (생성 x)
+        HttpSession session = request.getSession();
+        //세션에 로그인 회원 정보 보관
+        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
+
+        return "redirect:/";
+    }
+
     //로그아웃 - 쿠키 만료시키기
     //@PostMapping("/logout")
     public String logoutV1(HttpServletResponse response) {
@@ -84,12 +112,24 @@ public class LoginController {
         return "redirect:/";
     }
 
-    //로그아웃 - 쿠키 만료시키기
-    @PostMapping("/logout")
+    //@PostMapping("/logout")
     public String logoutV2(HttpServletRequest request) {
         sessionManager.expire(request);
         return "redirect:/";
     }
+
+    @PostMapping("/logout")
+    public String logoutV3(HttpServletRequest request) {
+        //세션이 없는 경우 null 반환
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            //세션 및 데이터 삭제
+            session.invalidate();
+        }
+        sessionManager.expire(request);
+        return "redirect:/";
+    }
+
 
     //쿠키 만료시키는 방법
     private void expireCookie(HttpServletResponse response, String cookieName) {
