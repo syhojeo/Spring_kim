@@ -1,6 +1,7 @@
 package hello.login;
 
 import hello.login.web.filter.LogFilter;
+import hello.login.web.filter.LoginCheckFilter;
 import javax.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,19 @@ public class WebConfig {
         filterFilterRegistrationBean.addUrlPatterns("/*");
 
         //logback mdc : 같은 요청에 모두 같은 식별자 로그를 남기는 방법
+        return filterFilterRegistrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean loginCheckFilter() {
+        FilterRegistrationBean<Filter> filterFilterRegistrationBean = new FilterRegistrationBean<>();
+        //등록할 필터
+        filterFilterRegistrationBean.setFilter(new LoginCheckFilter());
+        //필터의 순서 (낮을 수록 먼저 동작)
+        filterFilterRegistrationBean.setOrder(2);
+        //적용할 URL 패턴
+        filterFilterRegistrationBean.addUrlPatterns("/*");
+
         return filterFilterRegistrationBean;
     }
 }

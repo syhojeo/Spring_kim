@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @Controller
@@ -82,6 +83,8 @@ public class LoginController {
     //HTTP Session 사용하기
     @PostMapping("/login")
     public String loginV3(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult,
+        //redirect URL가 파라미터로 들어올때 사용해준다. 없는경우 /(defaultValue) = home 으로 리다이렉트
+        @RequestParam(defaultValue = "/") String redirectURL,
         HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return "login/loginForm";
@@ -102,7 +105,8 @@ public class LoginController {
         //세션에 로그인 회원 정보 보관
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
 
-        return "redirect:/";
+        //redirectURL 설정 사용
+        return "redirect:"+redirectURL;
     }
 
     //로그아웃 - 쿠키 만료시키기
