@@ -2,6 +2,7 @@ package hello.login.web;
 
 import hello.login.domain.member.Member;
 import hello.login.domain.member.MemberRepository;
+import hello.login.web.argumentresolver.Login;
 import hello.login.web.session.SessionManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -84,10 +85,24 @@ public class HomeController {
     }
 
     //spring에서 제공하는 기능인 @SessionAttribute 사용 -> 세션을 사용하기 쉬워짐
-    @GetMapping("/")
+    //@GetMapping("/")
     public String homeLoginV3Spring(
         @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
         Model model) {
+
+        //세션에 회원 데이터가 없으면 home
+        if (loginMember == null) {
+            return "home";
+        }
+
+        //세션이 유지되면 로그인으로 이동
+        model.addAttribute("member", loginMember);
+        return "loginHome";
+    }
+
+    @GetMapping("/")
+    //custom 어노테이션 사용 (@Login - 로그인된 사용자의 정보를 가져온다)
+    public String homeLoginV3ArgumentResolver(@Login Member loginMember, Model model) {
 
         //세션에 회원 데이터가 없으면 home
         if (loginMember == null) {
