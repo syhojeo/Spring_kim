@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 //웹 서버 오류페이지 사용하기
-//@Component //스프링에 꼭 등록해야 함
+@Component //스프링에 꼭 등록해야 함
 public class WebServerCustomizer implements WebServerFactoryCustomizer<ConfigurableWebServerFactory> {
 
     @Override
