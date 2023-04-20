@@ -2,12 +2,15 @@ package hello.exception;
 
 import hello.exception.filter.LogFilter;
 import hello.exception.interceptor.LogInterceptor;
+import hello.exception.resolver.MyHandlerExceptionResolver;
+import java.util.List;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -26,6 +29,12 @@ public class WebConfig implements WebMvcConfigurer {
             //오류 페이지 경로를 직접 넣어서 해당 URL Mapping 을 막는다
             //DispatcherType은 확인하지 못하지만 강력한 excludePathPatterns 를 지원
             .excludePathPatterns("/css/**", "*.ico", "/error", "/error-page/**");
+    }
+
+    //HandlerExceptionResolver 등록
+    @Override
+    public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+        resolvers.add(new MyHandlerExceptionResolver());
     }
 
     @Bean

@@ -22,6 +22,10 @@ public class ApiExceptionController {
             // => 오류 페이지 컨트롤러도 JSON 방식으로 응답할 수 있어야한다!
             throw new RuntimeException("잘못된 사용자");
         }
+        if (id.equals("bad")) {
+            throw new IllegalArgumentException("잘못된 입력 값");
+        }
+
         //아니라면 memberDto 반환
         return new MemberDto(id, "hello " + id);
     }
