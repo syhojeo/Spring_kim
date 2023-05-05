@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -56,6 +57,20 @@ public class ApiExceptionController {
             new NullPointerException());
     }
 
+    /*
+        DefaultHandlerExceptionResolver (Spring에서 제공)
+        스프링 내부에서 발생하는 스프링 예외를 해결한다
+        밑의 핸들러의 경우 RequestParameter를 Integer로 보내지 않았을 경우 TypeMismatchException이 발생한다
+        (type binding 에러)
+        보통 Exception 이 발생하는 경우 StatusCode로 500을 보내게 된다
+        하지만 Spring에서는 DefaultHandlerExceptionResolver를 사용해 400 에러로 설정하여 응답한다
+        실제로 DefatulHandlerExceptionResolver가 정의된 곳을 확인하면 TypeMismatchException 말고도
+        많은 Exception 에 대해 알맞은 StatusCode가 설정되도록 구현되어 있다
+     */
+    @GetMapping("/api/default-handler-ex")
+    public String defaultException(@RequestParam Integer data) {
+        return "ok";
+    }
 
     @Data
     @AllArgsConstructor //필드 개수만큼 생성자에 추가
